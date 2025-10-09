@@ -1,6 +1,8 @@
 #ifndef _BMP_H_
 #define _BMP_H_
 
+#include <stdint.h>
+
 // BMP file header
 struct bmpfile_header {
     uint32_t filesz;
@@ -34,7 +36,7 @@ struct bmp_pixel_t {
 struct bmp_image_t {
     struct bmpfile_header file_header;
     struct bmp_dib_v3_header_t dib_header;
-    //paylad
+    //payload
     struct bmp_pixel_t *data;
 };
 

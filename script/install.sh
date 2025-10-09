@@ -1,5 +1,6 @@
 #!/bin/bash
 
-docker pull ubuntu:22.04 
+docker build -t my-ubuntu-dev .
+
 # running with --privileged to be able to run strace and etc
-docker run --privileged -v "$(dirname "$PWD"):/home" -it ubuntu:22.04 /bin/bash
+docker run --privileged -v "$(dirname "$PWD"):/home" -it my-ubuntu-dev
