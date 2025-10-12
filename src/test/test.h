@@ -7,5 +7,8 @@
 
 int encryption_test(void);
 void lsb1_test(const char * original_path, const char * output_path);
-
+void lsb1_steganography_file_test(const char *original_path,
+    const char *output_bmp_path,
+    const char *secret_msg_path,
+    const char *extracted_msg_path);
 #endif

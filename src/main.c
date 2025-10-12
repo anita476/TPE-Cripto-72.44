@@ -8,12 +8,12 @@
 int main(int argc, char *argv[]){
     printf("Welcome to stego\n");
 
-    printf("===============================Encryption test:===========================================\n");
+    printf("\n===============================Encryption test:===========================================\n");
     encryption_test();
     printf("Encryption test finished\n");
 
 
-    printf("===============================LSB1 test:=================================================\n");
+    printf("\n===============================LSB1 test:=================================================\n");
 
     char * input = "public/pepper.bmp";
     char * output = "public/pepper_stego.bmp";
