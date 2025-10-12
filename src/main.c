@@ -6,7 +6,6 @@
 #include "include/lsb1.h"
 #include "include/file_utils.h"
 #include "include/stego_utils.h"
-#include "test/test.h"
 
 static int embed_stego(const args_t *args, int (*stego_func)(struct bmp_image_t *, const uint8_t *, size_t)) {
     // Read input file
