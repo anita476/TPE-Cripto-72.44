@@ -8,7 +8,7 @@
 #include "include/stego_utils.h"
 #include "test/test.h"
 
-static int embed_lsb1(const args_t *args) {
+static int embed_stego(const args_t *args, int (*stego_func)(struct bmp_image_t *, const uint8_t *, size_t)) {
     // Read input file
     size_t msg_len;
     uint8_t *msg_buf = read_file(args->in_file, &msg_len);
@@ -56,9 +56,9 @@ static int embed_lsb1(const args_t *args) {
         return 1; 
     }
 
-    // Use LSB1
-    if (stego_lsb1(bmp, to_hide, to_hide_len) != 0) {
-        fprintf(stderr, "LSB1 embedding failed\n");
+    // Use corresponding stego function
+    if (stego_func(bmp, to_hide, to_hide_len) != 0) {
+        fprintf(stderr, "Stego embedding failed\n");
         bmp_image_free(bmp); 
         free(to_hide);
         return 1;
@@ -72,7 +72,7 @@ static int embed_lsb1(const args_t *args) {
     return 0;
 }
 
-static int extract_lsb1(const args_t *args) {
+static int extract_stego(const args_t *args, void (*extract_func)(const struct bmp_image_t *, uint8_t *, size_t)) {
     // Load BMP
     struct bmp_image_t *bmp = load_bmp_new(args->bmp_file);
     if (!bmp) { 
@@ -82,7 +82,7 @@ static int extract_lsb1(const args_t *args) {
 
     // Extract first 4 bytes to get message size
     uint8_t size_buf[4];
-    lsb1_extract(bmp, size_buf, 4);
+    extract_func(bmp, size_buf, 4);
     size_t msg_len = (size_buf[0]<<24) | (size_buf[1]<<16) | (size_buf[2]<<8) | size_buf[3];
 
     // Validation
@@ -92,11 +92,11 @@ static int extract_lsb1(const args_t *args) {
         return 1;
     }
 
-    // Extract enough bytes for [mensaje][extensión]
+    // Extract message and extension
     size_t max_ext = 32;
     size_t total_to_extract = 4 + msg_len + max_ext;
     uint8_t *data = safe_malloc(total_to_extract);
-    lsb1_extract(bmp, data, total_to_extract);
+    extract_func(bmp, data, total_to_extract);
     bmp_image_free(bmp);
 
     // If there is encryption, decrypt
@@ -137,7 +137,6 @@ static int extract_lsb1(const args_t *args) {
             return 1;
         }
         char *ext = (char*)(dec + 4 + real_size);
-        printf("Recovered extension: '%s'\n", ext);
 
         // Save output file
         char out_name[512];
@@ -165,7 +164,6 @@ static int extract_lsb1(const args_t *args) {
         return 1;
     }
     char *ext = (char*)(data + 4 + real_size);
-    printf("Recovered extension: '%s'\n", ext);
 
     // Save output file
     char out_name[512];
@@ -180,22 +178,24 @@ static int extract_lsb1(const args_t *args) {
     return 0;
 }
 
+// Dispatcher para embed
 static int embed_dispatch(const args_t *args) {
     switch (args->steg) {
-        case STEG_LSB1: return embed_lsb1(args);
-        // case STEG_LSB4: return embed_lsb4(args); // TODO
-        // case STEG_LSBI: return embed_lsbi(args); // TODO
+        case STEG_LSB1: return embed_stego(args, stego_lsb1);
+        // case STEG_LSB4: return embed_stego(args, stego_lsb4); // TODO
+        // case STEG_LSBI: return embed_stego(args, stego_lsbi); // TODO
         default:
             fprintf(stderr, "Steganography algorithm not implemented.\n");
             return 1;
     }
 }
 
+// Dispatcher para extract
 static int extract_dispatch(const args_t *args) {
     switch (args->steg) {
-        case STEG_LSB1: return extract_lsb1(args);
-        // case STEG_LSB4: return extract_lsb4(args); // TODO
-        // case STEG_LSBI: return extract_lsbi(args); // TODO
+        case STEG_LSB1: return extract_stego(args, lsb1_extract);
+        // case STEG_LSB4: return extract_stego(args, lsb4_extract); // TODO
+        // case STEG_LSBI: return extract_stego(args, lsbi_extract); // TODO
         default:
             fprintf(stderr, "Steganography algorithm not implemented.\n");
             return 1;
@@ -203,8 +203,6 @@ static int extract_dispatch(const args_t *args) {
 }
 
 int main(int argc, char **argv) {
-    printf("Welcome to stego\n");
-
     args_t args;
     if (!parse_args(argc, argv, &args)) {
         return 1;
