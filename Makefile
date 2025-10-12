@@ -11,7 +11,7 @@ DEP := $(OBJ:.o=.d)
 
 CPPFLAGS ?= -I$(INC_DIR)
 CFLAGS ?= -Wall -Wextra -Wpedantic -std=c11
-LDFLAGS ?=
+LDFLAGS ?= -lssl -lcrypto
 LDLIBS ?=
 
 BUILD ?= release

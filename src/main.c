@@ -3,8 +3,10 @@
 #include <stdlib.h>
 #include "include/bmp.h"
 #include "include/lsb1.h"
+#include "test/test.h"
 
 int main(int argc, char *argv[]){
+    encryption_test();
     printf("Welcome to stego\n");
 
 
