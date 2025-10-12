@@ -2,7 +2,7 @@
 #include "../include/bmp.h"
 #include <stdio.h>
 
-int stego_lsb1(struct bmp_image_t * original_bmp, uint8_t * message, size_t message_length) {
+int stego_lsb1(struct bmp_image_t * original_bmp, const uint8_t * message, size_t message_length) {
     // first we analize capacity 
 
 
