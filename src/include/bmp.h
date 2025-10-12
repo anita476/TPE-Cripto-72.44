@@ -51,5 +51,13 @@ struct bmp_image_t {
 @return A pointer to the BMP image or NULL if an error occurs
 */
 struct bmp_image_t * load_bmp_new(const char * filepath);
+
+/**
+@brief Writes a bmp image to disk 
+@param bmp The bmp image to write
+@param path The path and name of the file
+**/
+void bmp_write(const struct bmp_image_t *bmp, const char * path);
+
 void bmp_image_free(struct bmp_image_t * bmp);
 #endif

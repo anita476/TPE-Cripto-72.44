@@ -28,7 +28,6 @@ struct bmp_image_t * load_bmp_new(const char * filepath){
     fread(&bmp->dib_header,sizeof(struct bmp_dib_v3_header_t),1,file);
 
     // validations
-
     if(bmp->file_header.bfType != 0x4D42){
         fclose(file);
         fprintf(stderr, "Error: provided file is not a BMP file\n");
@@ -76,6 +75,15 @@ struct bmp_image_t * load_bmp_new(const char * filepath){
     fclose(file);
 
     return bmp;
+}
+
+void bmp_write(const struct bmp_image_t *bmp, const char * path){
+    FILE *f = fopen(path, "wb");
+    if (!f) return;    
+    fwrite(&bmp->file_header, sizeof(bmp->file_header), 1, f);
+    fwrite(&bmp->dib_header, sizeof(bmp->dib_header), 1, f);
+    fwrite(bmp->data, 1, bmp->dib_header.bmp_bytesz, f);
+    fclose(f);
 }
 
 void bmp_image_free(struct bmp_image_t * bmp){
