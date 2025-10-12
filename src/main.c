@@ -3,14 +3,17 @@
 #include <stdlib.h>
 #include "include/bmp.h"
 #include "include/lsb1.h"
-#include "test/test_encryption.h"
+#include "test/test.h"
 
 int main(int argc, char *argv[]){
     printf("Welcome to stego\n");
 
-    printf("Encryption test:\n");
+    printf("-----------------------Encryption test:-------------------------------------------\n");
     encryption_test();
     printf("Encryption test finished\n");
+
+
+    printf("-----------------------LSB1 test:-------------------------------------------\n");
 
     const char *input_path  = "public/pepper.bmp";
     const char *output_path = "public/pepper_stego.bmp";

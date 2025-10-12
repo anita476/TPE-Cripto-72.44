@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include "test.h"
 #include "../include/encryption.h"
 
 const char *algo_names[] = {"AES128", "AES192", "AES256", "3DES"};
