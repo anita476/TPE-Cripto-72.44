@@ -7,7 +7,7 @@
 const char *algo_names[] = {"AES128", "AES192", "AES256", "3DES"};
 const char *mode_names[] = {"ECB", "CFB", "OFB", "CBC"};
 
-int main() {
+int encryption_test(void) {
     const char *password = "mypassword";
     const char *message = "Hello secret world!";
     size_t message_len = strlen(message);
