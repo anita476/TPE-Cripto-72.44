@@ -17,7 +17,7 @@ int main (void) {
     printf("LSB1 test finished\n");
 
     printf("\n==============================LSB1 file test:=============================================\n");
-    lsb1_steganography_file_test(input,output,"public/test_message.txt","public/test_message_stego.txt");
+    lsb1_steganography_file_test("public/airplane.bmp","public/airplane_stego.bmp","public/compare_peppers","public/compare_peppers_stego.txt");
     printf("LSB1 file test finished\n");
 
     return 0;

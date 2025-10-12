@@ -1,7 +1,10 @@
 #include "test.h"
 #include "../include/lsb1.h"
+
 static uint8_t *read_file(const char *path, size_t *out_size);
 static int write_file(const char *path, const uint8_t *data, size_t size);
+
+
 void lsb1_steganography_file_test(const char *original_path,
     const char *output_bmp_path,
     const char *secret_msg_path,
@@ -65,8 +68,7 @@ void lsb1_steganography_file_test(const char *original_path,
     else
     fprintf(stderr, "Error: could not write extracted message.\n");
 
-    // Compare (optional)
-    int match = 1;
+
     uint8_t *orig_check = read_file(secret_msg_path, &msg_len);
     if (orig_check && memcmp(orig_check, extracted_buf, msg_len) == 0)
     printf("✅ SUCCESS: Extracted data matches original.\n");
