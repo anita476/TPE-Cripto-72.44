@@ -64,5 +64,6 @@ run: $(TARGET)
 
 clean:
 	rm -rf $(BUILD_DIR) $(TARGET) $(TEST_TARGET)
+	rm -rf public/*_stego.*
 
 -include $(DEP) $(TEST_DEP)

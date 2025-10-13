@@ -2,7 +2,6 @@
 #define _BMP_H_
 
 #include <stdint.h>
-
 // ensure correct alignment (1 byte) no padding (to process binary files)
 #pragma pack(push,1)
 // BMP file header
