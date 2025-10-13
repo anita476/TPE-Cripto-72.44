@@ -1,5 +1,5 @@
-#ifndef _IMPROVED_LSB1_H_
-#define _IMPROVED_LSB1_H_
+#ifndef _LSBI_H_
+#define _LSBI_H_
 #include <stdint.h>
 #include <stdlib.h>
 #include "bmp.h"
@@ -28,9 +28,9 @@ typedef struct {
 
 #pragma pack(pop) 
 
-int stego_improved_lsb1(struct bmp_image_t * original_bmp, const uint8_t * message, size_t message_length);
+int stego_lsbi(struct bmp_image_t * original_bmp, const uint8_t * message, size_t message_length);
 
 
-void improved_lsb1_extract(const struct bmp_image_t *bmp, uint8_t *out, size_t msg_len);
+void lsbi_extract(const struct bmp_image_t *bmp, uint8_t *out, size_t msg_len);
 
 #endif

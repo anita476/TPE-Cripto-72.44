@@ -1,10 +1,10 @@
-#include "../include/improved_lsb1.h"
+#include "../include/lsbi.h"
 #include <stdint.h>
 #include <stdio.h>
 
 static int append_ref(pattern_group *group, uint8_t *ptr, size_t index);
 
-int stego_improved_lsb1(struct bmp_image_t * original_bmp, const uint8_t * message, size_t message_length){
+int stego_lsbi(struct bmp_image_t * original_bmp, const uint8_t * message, size_t message_length){
     // analysing capacity (we need 4 extra to store the patterns)
     if((message_length * 8 + 4) > original_bmp->dib_header.bmp_bytesz){
         fprintf(stderr, "Error: Message length exceeds bmp capacity. Max is %d\n",original_bmp->dib_header.bmp_bytesz);
@@ -69,7 +69,7 @@ int stego_improved_lsb1(struct bmp_image_t * original_bmp, const uint8_t * messa
 
 }
 
-void improved_lsb1_extract(const struct bmp_image_t *bmp, uint8_t *out, size_t msg_len) {
+void lsbi_extract(const struct bmp_image_t *bmp, uint8_t *out, size_t msg_len) {
     const uint8_t *data_start = (const uint8_t *)bmp->data;
     const uint8_t *lsb1_data = data_start + 4; // skip first 4 bytes (flags)
     size_t bit_idx = 0;
