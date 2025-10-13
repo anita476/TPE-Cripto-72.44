@@ -4,6 +4,7 @@
 #include "include/args.h"
 #include "include/bmp.h"
 #include "include/lsb1.h"
+#include "include/lsb4.h"
 #include "include/file_utils.h"
 #include "include/stego_utils.h"
 
@@ -181,7 +182,7 @@ static int extract_stego(const args_t *args, void (*extract_func)(const struct b
 static int embed_dispatch(const args_t *args) {
     switch (args->steg) {
         case STEG_LSB1: return embed_stego(args, stego_lsb1);
-        // case STEG_LSB4: return embed_stego(args, stego_lsb4); // TODO
+        case STEG_LSB4: return embed_stego(args, stego_lsb4); // TODO
         // case STEG_LSBI: return embed_stego(args, stego_lsbi); // TODO
         default:
             fprintf(stderr, "Steganography algorithm not implemented.\n");
@@ -193,7 +194,7 @@ static int embed_dispatch(const args_t *args) {
 static int extract_dispatch(const args_t *args) {
     switch (args->steg) {
         case STEG_LSB1: return extract_stego(args, lsb1_extract);
-        // case STEG_LSB4: return extract_stego(args, lsb4_extract); // TODO
+        case STEG_LSB4: return extract_stego(args, lsb4_extract); // TODO
         // case STEG_LSBI: return extract_stego(args, lsbi_extract); // TODO
         default:
             fprintf(stderr, "Steganography algorithm not implemented.\n");
