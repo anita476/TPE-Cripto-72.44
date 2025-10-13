@@ -1,11 +1,10 @@
 #include "test.h"
-#include "../include/lsb1.h"
+#include "../include/improved_lsb1.h"
 
 static uint8_t *read_file(const char *path, size_t *out_size);
 static int write_file(const char *path, const uint8_t *data, size_t size);
 
-
-void lsb1_steganography_file_test(const char *original_path,
+void improved_lsb1_steganography_file_test(const char *original_path,
     const char *output_bmp_path,
     const char *secret_msg_path,
     const char *extracted_msg_path) {
@@ -28,7 +27,7 @@ void lsb1_steganography_file_test(const char *original_path,
     printf("Loaded message file '%s' (%zu bytes)\n", secret_msg_path, msg_len);
 
     // Encode the message
-    if (stego_lsb1(bmp, msg_buf, msg_len) != 0) {
+    if (stego_improved_lsb1(bmp, msg_buf, msg_len) != 0) {
         fprintf(stderr, "Error: LSB1 encoding failed.\n");
         free(msg_buf);
         bmp_image_free(bmp);
@@ -59,7 +58,7 @@ void lsb1_steganography_file_test(const char *original_path,
         return;
     }
 
-    lsb1_extract(stego_bmp, extracted_buf, msg_len);
+    improved_lsb1_extract(stego_bmp, extracted_buf, msg_len);
     bmp_image_free(stego_bmp);
 
     // Save the extracted message to a file
