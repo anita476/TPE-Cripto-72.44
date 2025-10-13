@@ -1,5 +1,5 @@
 #include "test.h"
-#include "../include/improved_lsb1.h"
+#include "../include/lsbi.h"
 
 
 void improved_lsb1_test(const char * original_path, const char * output_path){
@@ -16,7 +16,7 @@ void improved_lsb1_test(const char * original_path, const char * output_path){
     size_t msg_len = strlen(secret_msg) + 1; // include null terminator
 
     printf("Encoding message: \"%s\" (length %zu)\n", secret_msg, msg_len);
-    if (stego_improved_lsb1(bmp, (uint8_t *)secret_msg, msg_len) != 0) {
+    if (stego_lsbi(bmp, (uint8_t *)secret_msg, msg_len) != 0) {
         fprintf(stderr, "Error: LSB1 encoding failed.\n");
         bmp_image_free(bmp);
         return;
@@ -40,7 +40,7 @@ void improved_lsb1_test(const char * original_path, const char * output_path){
         return;
     }
 
-    improved_lsb1_extract(bmp_stego, extracted_msg, msg_len);
+    lsbi_extract(bmp_stego, extracted_msg, msg_len);
     printf("Extracted message: \"%s\"\n", extracted_msg);
 
     if (strcmp(secret_msg, (char *)extracted_msg) == 0) {
