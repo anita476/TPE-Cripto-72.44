@@ -20,5 +20,10 @@ int main (void) {
     lsb1_steganography_file_test("public/airplane.bmp","public/airplane_stego.bmp","public/compare_peppers","public/compare_peppers_stego.txt");
     printf("LSB1 file test finished\n");
 
+
+    printf("\n==============================Imrpoved LSB1 test=========================================\n");
+    improved_lsb1_test("public/baboon.bmp", "public/baboon_stego.bmp");
+    printf("Improved LSB1 test finished\n");
+    
     return 0;
 }

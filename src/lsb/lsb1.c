@@ -7,7 +7,7 @@ int stego_lsb1(struct bmp_image_t * original_bmp, const uint8_t * message, size_
 
 
     if((message_length * 8) > original_bmp->dib_header.bmp_bytesz){
-        fprintf(stderr, "Error: Message length exceeds bmp capacity\n");
+        fprintf(stderr, "Error: Message length exceeds bmp capacity. Max is %d\n",original_bmp->dib_header.bmp_bytesz);
         return 1;
     }
     uint8_t * data = (uint8_t *)original_bmp->data;
