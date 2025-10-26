@@ -5,6 +5,7 @@
 #include "include/bmp.h"
 #include "include/lsb1.h"
 #include "include/lsb4.h"
+#include "include/lsbi.h"
 #include "include/file_utils.h"
 #include "include/stego_utils.h"
 
@@ -13,13 +14,17 @@ static int embed_stego(const args_t *args, int (*stego_func)(struct bmp_image_t 
     size_t msg_len;
     uint8_t *msg_buf = read_file(args->in_file, &msg_len);
     if (!msg_buf) { 
-        fprintf(stderr, "Error opening input file\n"); 
+        fprintf(stderr, "Error: could not open input file\n"); 
         return 1; 
     }
 
     // Pack message
     size_t plain_len;
     uint8_t *plain = pack_plain(args->in_file, msg_buf, msg_len, &plain_len);
+    if(plain == NULL){
+        fprintf(stderr,"Error: could not pack message\n");
+        return 1;
+    }
     free(msg_buf);
 
     // If no cypher is used, to_hide is plain
@@ -32,14 +37,14 @@ static int embed_stego(const args_t *args, int (*stego_func)(struct bmp_image_t 
         params.algorithm = args->algorithm;
         params.mode = args->mode;
         if (!derive_key_iv(args->password, params.algorithm, params.key, &params.key_len, params.iv, &params.iv_len)) {
-            fprintf(stderr, "Key derivation failed\n"); 
+            fprintf(stderr, "Error: key derivation failed\n"); 
             free(plain); 
             return 1;
         }
         uint8_t *enc_buf = NULL;
         size_t enc_len = 0;
         if (!encrypt_buffer(plain, plain_len, &enc_buf, &enc_len, &params)) {
-            fprintf(stderr, "Encryption failed\n"); 
+            fprintf(stderr, "Error: Encryption failed\n"); 
             free(plain); 
             return 1;
         }
@@ -52,13 +57,13 @@ static int embed_stego(const args_t *args, int (*stego_func)(struct bmp_image_t 
     struct bmp_image_t *bmp = load_bmp_new(args->bmp_file);
     if (!bmp) { 
         free(to_hide); 
-        fprintf(stderr, "Error loading BMP\n"); 
+        fprintf(stderr, "Error: could not load BMP\n"); 
         return 1; 
     }
 
     // Use corresponding stego function
     if (stego_func(bmp, to_hide, to_hide_len) != 0) {
-        fprintf(stderr, "Stego embedding failed\n");
+        fprintf(stderr, "Error: Stego embedding failed\n");
         bmp_image_free(bmp); 
         free(to_hide);
         return 1;
@@ -76,7 +81,7 @@ static int extract_stego(const args_t *args, void (*extract_func)(const struct b
     // Load BMP
     struct bmp_image_t *bmp = load_bmp_new(args->bmp_file);
     if (!bmp) { 
-        fprintf(stderr, "Error loading BMP\n"); 
+        fprintf(stderr, "Error: could not load BMP\n"); 
         return 1; 
     }
 
@@ -105,7 +110,7 @@ static int extract_stego(const args_t *args, void (*extract_func)(const struct b
         params.algorithm = args->algorithm;
         params.mode = args->mode;
         if (!derive_key_iv(args->password, params.algorithm, params.key, &params.key_len, params.iv, &params.iv_len)) {
-            fprintf(stderr, "Key derivation failed\n");
+            fprintf(stderr, "Error: Key derivation failed\n");
             free(data);
             return 1;
         }
@@ -118,7 +123,7 @@ static int extract_stego(const args_t *args, void (*extract_func)(const struct b
         uint8_t *dec = NULL;
         size_t dec_len = 0;
         if (!decrypt_buffer(data+4, enc_len, &dec, &dec_len, &params)) {
-            fprintf(stderr, "Decryption failed\n");
+            fprintf(stderr, "Error: Decryption failed\n");
             free(data);
             return 1;
         }
@@ -142,7 +147,7 @@ static int extract_stego(const args_t *args, void (*extract_func)(const struct b
         char out_name[512];
         snprintf(out_name, sizeof(out_name), "%s%s", args->out_file, ext);
         if (!write_file(out_name, dec + 4, real_size)) {
-            fprintf(stderr, "Error writing output file\n");
+            fprintf(stderr, "Error. could not write output file\n");
             free(dec);
             return 1;
         }
@@ -169,7 +174,7 @@ static int extract_stego(const args_t *args, void (*extract_func)(const struct b
     char out_name[512];
     snprintf(out_name, sizeof(out_name), "%s%s", args->out_file, ext);
     if (!write_file(out_name, data + 4, real_size)) {
-        fprintf(stderr, "Error writing output file\n");
+        fprintf(stderr, "Error: could not write output file\n");
         free(data);
         return 1;
     }
@@ -182,10 +187,10 @@ static int extract_stego(const args_t *args, void (*extract_func)(const struct b
 static int embed_dispatch(const args_t *args) {
     switch (args->steg) {
         case STEG_LSB1: return embed_stego(args, stego_lsb1);
-        case STEG_LSB4: return embed_stego(args, stego_lsb4); // TODO
-        // case STEG_LSBI: return embed_stego(args, stego_lsbi); // TODO
+        case STEG_LSB4: return embed_stego(args, stego_lsb4); 
+        case STEG_LSBI: return embed_stego(args, stego_lsbi); 
         default:
-            fprintf(stderr, "Steganography algorithm not implemented.\n");
+            fprintf(stderr, "Error: Steganography algorithm not implemented.\n");
             return 1;
     }
 }
@@ -194,10 +199,10 @@ static int embed_dispatch(const args_t *args) {
 static int extract_dispatch(const args_t *args) {
     switch (args->steg) {
         case STEG_LSB1: return extract_stego(args, lsb1_extract);
-        case STEG_LSB4: return extract_stego(args, lsb4_extract); // TODO
-        // case STEG_LSBI: return extract_stego(args, lsbi_extract); // TODO
+        case STEG_LSB4: return extract_stego(args, lsb4_extract);
+        case STEG_LSBI: return extract_stego(args, lsbi_extract); 
         default:
-            fprintf(stderr, "Steganography algorithm not implemented.\n");
+            fprintf(stderr, "Error: Steganography algorithm not implemented.\n");
             return 1;
     }
 }

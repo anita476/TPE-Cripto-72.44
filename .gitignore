@@ -58,5 +58,4 @@ dkms.conf
 stego
 test_runner
 # all stego files
-*_stego.*
-*_stego
+*stego*
