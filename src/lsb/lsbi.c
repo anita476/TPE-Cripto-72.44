@@ -7,15 +7,15 @@ static int append_ref(pattern_group *group, uint8_t *ptr, size_t index);
 static uint8_t get_pattern(uint8_t byte);
 
 int stego_lsbi(struct bmp_image_t * original_bmp, const uint8_t * message, size_t message_length){
-    // analysing capacity (we need 8 extra bytes: 4 for message length + 4 for pattern flags)
-    if((message_length * 8 + 8) > original_bmp->dib_header.bmp_bytesz){
+    // analysing capacity (we need 4 extra bytes  or pattern flags)
+    if((message_length * 4 + 8) > original_bmp->dib_header.bmp_bytesz){
         fprintf(stderr, "Error: Message length exceeds bmp capacity. Max is %d\n",original_bmp->dib_header.bmp_bytesz);
         return 1;
     }
     // we first encrypt using "lsb1", whilst also keeping track of the different pattern groups
     // we must skip the first 8 bytes: 4 for message length + 4 for pattern flags
     uint8_t * data_start = (uint8_t *)original_bmp->data;
-    uint8_t * lsb1_data = data_start + 8; // we advance the pointer 8 bytes
+    uint8_t * lsb1_data = data_start + 4; // we advance the pointer 4 bytes, the payload is after the pattern
     size_t bit_idx = 0;
     // we "group" by 1st2nd bit pattern
     // possible gorups:
@@ -53,7 +53,7 @@ int stego_lsbi(struct bmp_image_t * original_bmp, const uint8_t * message, size_
     // now we must decide which to invert 
     for (int p = 0; p < 4; p++) {
         if (groups[p].count * 2> groups[p].total) { // if pattern p marked for inversion
-            data_start[4 + p] = (data_start[4 + p] & 0xFE) | 1; // store flag in bytes 4-7
+            data_start[p] = (data_start[p] & 0xFE) | 1; // store flag in bytes 4-7
             struct byte_ref *node = groups[p].items;
             while (node) {
                 *(node->ptr) ^= 1; // flip LSB in-place
@@ -79,13 +79,13 @@ int stego_lsbi(struct bmp_image_t * original_bmp, const uint8_t * message, size_
 
 void lsbi_extract(const struct bmp_image_t *bmp, uint8_t *out, size_t msg_len) {
     const uint8_t *data_start = (const uint8_t *)bmp->data;
-    const uint8_t *lsb1_data = data_start + 8;
+    const uint8_t *lsb1_data = data_start + 4;
     size_t bit_idx = 0;
 
     uint8_t pattern_flags[4] = {0};
 
     for (int i = 0; i < 4; i++) {
-        pattern_flags[i] = data_start[4 + i] & 1; // 1 ->pattern was inverted (read from bytes 4-7)
+        pattern_flags[i] = data_start[i] & 1; // 1 ->pattern was inverted (read from bytes 4-7)
     }
 
     // extracting message bits
