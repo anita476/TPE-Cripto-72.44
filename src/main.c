@@ -90,8 +90,10 @@ static int extract_stego(const args_t *args, void (*extract_func)(const struct b
     extract_func(bmp, size_buf, 4);
     size_t msg_len = (size_buf[0]<<24) | (size_buf[1]<<16) | (size_buf[2]<<8) | size_buf[3];
 
+    printf("DEBUG: Length total of message to extract: %zu\n", msg_len);
     // Validation
-    if (msg_len == 0 || msg_len > bmp->dib_header.bmp_bytesz - 4) {
+    if (msg_len == 0 || msg_len> bmp->dib_header.bmp_bytesz - 4) {
+        fprintf(stdout, "Header: %d\n", bmp->dib_header.bmp_bytesz);
         fprintf(stderr, "Error: extracted msg_len (%zu) is invalid\n", msg_len);
         bmp_image_free(bmp);
         return 1;
@@ -163,12 +165,14 @@ static int extract_stego(const args_t *args, void (*extract_func)(const struct b
         return 1;
     }
     size_t real_size = (data[0]<<24) | (data[1]<<16) | (data[2]<<8) | data[3];
+    printf("DEBUG: real size %ld\n",real_size);
     if (real_size > total_to_extract - 4) {
         fprintf(stderr, "Error: real_size (%zu) > available (%zu)\n", real_size, total_to_extract - 4);
         free(data);
         return 1;
     }
     char *ext = (char*)(data + 4 + real_size);
+    printf("DEBUG: Extension: %s\n", ext);
 
     // Save output file
     char out_name[512];

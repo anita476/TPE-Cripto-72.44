@@ -30,7 +30,6 @@ typedef struct {
 
 int stego_lsbi(struct bmp_image_t * original_bmp, const uint8_t * message, size_t message_length);
 
-
 void lsbi_extract(const struct bmp_image_t *bmp, uint8_t *out, size_t msg_len);
 
 #endif
