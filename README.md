@@ -1,10 +1,10 @@
 # TPE-Cripto-72.44
 Trabajo Especial de Implementación para Criptografía y Seguridad (72.44) @ITBA
 
-## Grupo 8
-- **Ana Negre** - [63074]
-- **Matías Leporini** - [62872]
-- **Camila Lee** - [63382]
+## Integrates
+- **[Ana Negre](https://github.com/anita476)** - [63074]
+- **[Matías Leporini](https://github.com/LosProgramasdeLepo)** - [62872]
+- **[Camila Lee](https://github.com/clee0412)** - [63382]
 
 ## Tabla de Contenidos
 - [Descripción](#descripción)
@@ -57,24 +57,40 @@ sudo apt install -y libssl-dev openssl
 
 
 ## Instalación y Compilación
+
 ### Método 1: Usando Docker (Recomendado)
+El contenedor Docker proporciona un ambiente Ubuntu 22.04 con todas las dependencias preinstaladas (OpenSSL 3.0, build-essential, etc.).
+
+#### Primera vez (instalación completa)
 ```bash
-# Paso 1: Construir la imagen Docker
-cd scripts/
+# Construir la imagen y entrar al contenedor automáticamente
+cd script/
 ./install.sh
 
-# Paso 2: Ejecutar el contenedor
-./run-container.sh
-
-# Paso 3: Compilar dentro del contenedor
+# Una vez dentro del contenedor, compilar el proyecto
 cd /home
 make clean
 make
 
-# Verificar el ejecutable
+# Verificar que el ejecutable se creó correctamente
 ls -lh stego
+./stego --help
 ```
-El contenedor Docker proporciona un ambiente Ubuntu 22.04 con todas las dependencias preinstaladas.
+
+#### Usos posteriores
+```bash
+# Si ya instalaste previamente, solo ejecuta el contenedor
+cd script/
+./run-container.sh
+
+# Dentro del contenedor, compilar si hay cambios en el código
+cd /home
+make
+
+# Ejecutar el programa
+./stego [opciones]
+```
+
 ### Método 2: Compilación Local
 ```bash
 # Paso 1: Clonar el repositorio
