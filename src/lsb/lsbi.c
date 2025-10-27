@@ -10,11 +10,6 @@ static void lsb1_embed_no_red(uint8_t *data, const uint8_t *message, size_t mess
 static void lsb1_extract_no_red(const uint8_t *data, uint8_t *out, size_t msg_len, size_t start_byte);
 
 int stego_lsbi(struct bmp_image_t * original_bmp, const uint8_t * message, size_t message_length){
-<<<<<<< HEAD
-    // analysing capacity (we need 4 extra bytes  or pattern flags)
-    if((message_length * 4 + 8) > original_bmp->dib_header.bmp_bytesz){
-        fprintf(stderr, "Error: Message length exceeds bmp capacity. Max is %d\n",original_bmp->dib_header.bmp_bytesz);
-=======
     // analysing capacity (we need 8 extra bytes: 4 for message length + 4 for pattern flags)
     // if((message_length * 8 + 8) > original_bmp->dib_header.bmp_bytesz){
     //     fprintf(stderr, "Error: Message length exceeds bmp capacity. Max is %d\n",original_bmp->dib_header.bmp_bytesz);
@@ -27,23 +22,11 @@ int stego_lsbi(struct bmp_image_t * original_bmp, const uint8_t * message, size_
     size_t effective_capacity = (original_bmp->dib_header.bmp_bytesz * 2) / 3;
     if ((message_length * 8 + 4 * 8) > effective_capacity) {
         fprintf(stderr, "Error: Message length exceeds bmp capacity. Max is %d\n", effective_capacity);
->>>>>>> 4043f341524f63d762467e001159e9294e16cf90
         return 1;
     }
 
     // we first encrypt using "lsb1", whilst also keeping track of the different pattern groups
     // we must skip the first 8 bytes: 4 for message length + 4 for pattern flags
-<<<<<<< HEAD
-    uint8_t * data_start = (uint8_t *)original_bmp->data;
-    uint8_t * lsb1_data = data_start + 4; // we advance the pointer 4 bytes, the payload is after the pattern
-    size_t bit_idx = 0;
-    // we "group" by 1st2nd bit pattern
-    // possible gorups:
-    // 00 -> 0
-    // 01 -> 1
-    // 10 -> 2
-    // 11 -> 3
-=======
     uint8_t * data = (uint8_t *)original_bmp->data;
     size_t total_bytes = original_bmp->dib_header.bmp_bytesz;
 
@@ -61,7 +44,6 @@ int stego_lsbi(struct bmp_image_t * original_bmp, const uint8_t * message, size_
     lsb1_embed_no_red(data, message, message_length, 4); 
 
     // step 3: count patterns and changes for each pattern
->>>>>>> 4043f341524f63d762467e001159e9294e16cf90
     pattern_group groups[4] = {0};
     for (size_t i = 0; i < total_bytes; i++) {
         uint8_t pattern = get_pattern(data[i]);
@@ -88,12 +70,7 @@ int stego_lsbi(struct bmp_image_t * original_bmp, const uint8_t * message, size_
 
     // step 5: apply inversions from byte 3 onwards (PATTERN_QTY - 1)
     for (int p = 0; p < 4; p++) {
-<<<<<<< HEAD
-        if (groups[p].count * 2> groups[p].total) { // if pattern p marked for inversion
-            data_start[p] = (data_start[p] & 0xFE) | 1; // store flag in bytes 4-7
-=======
         if (invert_pattern[p]) {
->>>>>>> 4043f341524f63d762467e001159e9294e16cf90
             struct byte_ref *node = groups[p].items;
             while (node) {
                 if (node->index >= 3) {  // Only invert from byte 3 onwards
@@ -175,12 +152,6 @@ int stego_lsbi(struct bmp_image_t * original_bmp, const uint8_t * message, size_
 }
 
 void lsbi_extract(const struct bmp_image_t *bmp, uint8_t *out, size_t msg_len) {
-<<<<<<< HEAD
-    const uint8_t *data_start = (const uint8_t *)bmp->data;
-    const uint8_t *lsb1_data = data_start + 4;
-    size_t bit_idx = 0;
-=======
->>>>>>> 4043f341524f63d762467e001159e9294e16cf90
 
     const uint8_t *data = (const uint8_t *)bmp->data;
     size_t total_bytes = bmp->dib_header.bmp_bytesz;
@@ -188,11 +159,7 @@ void lsbi_extract(const struct bmp_image_t *bmp, uint8_t *out, size_t msg_len) {
     // step 1: read inversion flags from bytes 0-3
     bool invert_pattern[4];
     for (int i = 0; i < 4; i++) {
-<<<<<<< HEAD
-        pattern_flags[i] = data_start[i] & 1; // 1 ->pattern was inverted (read from bytes 4-7)
-=======
         invert_pattern[i] = (data[i] & 1) != 0;
->>>>>>> 4043f341524f63d762467e001159e9294e16cf90
     }
 
     //step 2: create a copy of data and apply inversions from byte 3 onwards
