@@ -1,10 +1,10 @@
 # TPE-Cripto-72.44
 Trabajo Especial de Implementación para Criptografía y Seguridad (72.44) @ITBA
 
-## Grupo 8
-- **Ana Negre** - [63074]
-- **Matías Leporini** - [62872]
-- **Camila Lee** - [63382]
+## Integrates
+- **[Ana Negre](https://github.com/anita476)** - [63074]
+- **[Matías Leporini](https://github.com/LosProgramasdeLepo)** - [62872]
+- **[Camila Lee](https://github.com/clee0412)** - [63382]
 
 ## Tabla de Contenidos
 - [Descripción](#descripción)
@@ -57,6 +57,8 @@ sudo apt install -y libssl-dev openssl
 
 
 ## Instalación y Compilación
+
+### Método 1: Usando Docker (Recomendado)
 El contenedor Docker proporciona un ambiente Ubuntu 22.04 con todas las dependencias preinstaladas (OpenSSL 3.0, build-essential, etc.).
 
 #### Primera vez (instalación completa)
