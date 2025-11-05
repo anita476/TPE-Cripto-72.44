@@ -84,7 +84,7 @@ cd script/
 ./run-container.sh
 
 # Dentro del contenedor, compilar si hay cambios en el código
-cd /home
+cd /home/TPE-Cripto-72.44/
 make
 
 # Ejecutar el programa
