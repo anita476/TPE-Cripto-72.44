@@ -27,7 +27,7 @@ Implementación de algoritmos de esteganografía LSB (Least Significant Bit) par
 
 **Cifrado opcional:**
 - Algoritmos: AES-128, AES-192, AES-256, 3DES
-- Modos: ECB, CBC, CFB (8 bits), OFB (128 bits)
+- Modos: ECB, CBC, CFB, OFB (128 bits)
 - Derivación de clave: PBKDF2-HMAC-SHA256 con 10,000 iteraciones
 - Salt fijo: `0x0000000000000000`
 - Padding: PKCS#5
@@ -35,7 +35,6 @@ Implementación de algoritmos de esteganografía LSB (Least Significant Bit) par
 **Características:**
 - Preservación automática de la extensión del archivo oculto
 - Formato de almacenamiento: tamaño (4 bytes big-endian) + datos + extensión + '\0'
-- Soporte para cualquier tipo de archivo
 
 ## Requisitos del Sistema
 
@@ -55,7 +54,6 @@ sudo apt install -y build-essential
 sudo apt install -y libssl-dev openssl
 ```
 
-
 ## Instalación y Compilación
 
 ### Método 1: Usando Docker (Recomendado)
@@ -68,7 +66,7 @@ cd script/
 ./install.sh
 
 # Una vez dentro del contenedor, compilar el proyecto
-cd /home
+cd /home/TPE-Cripto-72.44/
 make clean
 make
 
@@ -111,7 +109,6 @@ make
 ```bash
 ./stego -embed -in <file> -p <bitmapfile> -out <bitmapfile> -steg <LSB1|LSB4|LSBI> [-a <aes128|aes192|aes256|3des>] [-m <ecb|cfb|ofb|cbc>] [-pass <password>]
 ```
-
 
 **Extraer información (extract):**
 ```bash

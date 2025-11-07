@@ -1,1 +1,0 @@
-testing with an arbitraty binary object (text file)
