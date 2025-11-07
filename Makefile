@@ -1,5 +1,5 @@
 CC ?= gcc
-TARGET ?= stego
+TARGET ?= stegobmp
 TEST_TARGET ?= test_runner
 
 SRC_DIR := src
@@ -64,6 +64,6 @@ run: $(TARGET)
 
 clean:
 	rm -rf $(BUILD_DIR) $(TARGET) $(TEST_TARGET)
-	rm -rf public/*_stego.*
+	rm -rf public/*_stegobmp.*
 
 -include $(DEP) $(TEST_DEP)

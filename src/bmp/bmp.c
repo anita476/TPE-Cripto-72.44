@@ -24,8 +24,19 @@ struct bmp_image_t * load_bmp_new(const char * filepath){
     }
 
     // read the headers
-    fread(&bmp->file_header, sizeof(struct bmpfile_header), 1, file);
-    fread(&bmp->dib_header,sizeof(struct bmp_dib_v3_header_t),1,file);
+    if (fread(&bmp->file_header, sizeof(struct bmpfile_header), 1, file) != 1) {
+        fclose(file);
+        fprintf(stderr, "Error: could not read bmp file header");
+        free(bmp);
+        return NULL;
+    }
+
+    if (fread(&bmp->dib_header,sizeof(struct bmp_dib_v3_header_t),1,file) != 1) {
+        fclose(file);
+        fprintf(stderr, "Error: could not read bmp dib header");
+        free(bmp);
+        return NULL;
+    }
 
     // validations
     if(bmp->file_header.bfType != 0x4D42){

@@ -71,8 +71,8 @@ make clean
 make
 
 # Verificar que el ejecutable se creó correctamente
-ls -lh stego
-./stego --help
+ls -lh stegobmp
+./stegobmp --help
 ```
 
 #### Usos posteriores
@@ -86,7 +86,7 @@ cd /home/TPE-Cripto-72.44/
 make
 
 # Ejecutar el programa
-./stego [opciones]
+./stegobmp [opciones]
 ```
 
 ### Método 2: Compilación Local
@@ -100,19 +100,19 @@ make clean
 make
 
 # Paso 3: Verificar el ejecutable
-./stego --help
+./stegobmp --help
 ```
 
 ## Uso del Programa
 ### Sintaxis General
 **Ocultar información (embed):**
 ```bash
-./stego -embed -in <file> -p <bitmapfile> -out <bitmapfile> -steg <LSB1|LSB4|LSBI> [-a <aes128|aes192|aes256|3des>] [-m <ecb|cfb|ofb|cbc>] [-pass <password>]
+./stegobmp -embed -in <file> -p <bitmapfile> -out <bitmapfile> -steg <LSB1|LSB4|LSBI> [-a <aes128|aes192|aes256|3des>] [-m <ecb|cfb|ofb|cbc>] [-pass <password>]
 ```
 
 **Extraer información (extract):**
 ```bash
-./stego -extract -p <bitmapfile> -out <file> -steg <LSB1|LSB4|LSBI> [-a <aes128|aes192|aes256|3des>] [-m <ecb|cfb|ofb|cbc>] [-pass <password>]
+./stegobmp -extract -p <bitmapfile> -out <file> -steg <LSB1|LSB4|LSBI> [-a <aes128|aes192|aes256|3des>] [-m <ecb|cfb|ofb|cbc>] [-pass <password>]
 ```
 
 
@@ -138,16 +138,16 @@ make
 ### Ejemplos
 ```bash
 # Ocultar sin cifrado
-./stego -embed -in mensaje.txt -p imagen.bmp -out salida.bmp -steg LSB1
+./stegobmp -embed -in mensaje.txt -p imagen.bmp -out salida.bmp -steg LSB1
 
 # Extraer sin cifrado
-./stego -extract -p salida.bmp -out mensaje_extraido -steg LSB1
+./stegobmp -extract -p salida.bmp -out mensaje_extraido -steg LSB1
 
 # Ocultar con cifrado
-./stego -embed -in mensaje.txt -p imagen.bmp -out salida.bmp -steg LSBI -a aes256 -m cbc -pass "secreto"
+./stegobmp -embed -in mensaje.txt -p imagen.bmp -out salida.bmp -steg LSBI -a aes256 -m cbc -pass "secreto"
 
 # Extraer con cifrado
-./stego -extract -p salida.bmp -out mensaje_extraido -steg LSBI -a aes256 -m cbc -pass "secreto"
+./stegobmp -extract -p salida.bmp -out mensaje_extraido -steg LSBI -a aes256 -m cbc -pass "secreto"
 ```
 
 ## Referencias
